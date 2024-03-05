@@ -14,7 +14,6 @@ import {
     useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { createPortal } from "react-dom";
 import TaskCard from "../components/TaskCard";
 import { getCurrentDate } from '../helper/getCurrentDate'
 import { Navigate } from "react-router-dom";
@@ -51,7 +50,10 @@ const KanbanBoard = () => {
     // Delete columns
     const deleteColumn = (id: Id) => {
         const filterdColumn = columns.filter((columns) => columns.id !== id);
+        const task = tasks.filter((task) => task.columnId !== id)
+        console.log(id)
         setColumns(filterdColumn);
+        setTasks(task)
     };
     const onDragStart = (event: DragStartEvent) => {
         if (event.active.data.current?.type === "Column") {
@@ -112,7 +114,6 @@ const KanbanBoard = () => {
                 const overIndex = tasks.findIndex((t) => t.id === overId);
 
                 if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-                    // Fix introduced after video recording
                     tasks[activeIndex].columnId = tasks[overIndex].columnId;
                     return arrayMove(tasks, activeIndex, overIndex - 1);
                 }
@@ -123,11 +124,10 @@ const KanbanBoard = () => {
 
         const isOverAColumn = over.data.current?.type === "Column";
 
-        // Im dropping a Task over a column
+        // dropping a Task over a column
         if (isActiveATask && isOverAColumn) {
             setTasks((tasks) => {
                 const activeIndex = tasks.findIndex((t) => t.id === activeId);
-
                 tasks[activeIndex].columnId = overId;
                 console.log("DROPPING TASK OVER COLUMN", { activeIndex });
                 return arrayMove(tasks, activeIndex, activeIndex);
@@ -160,6 +160,7 @@ const KanbanBoard = () => {
         setTasks(newTasks);
     };
 
+
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
@@ -179,7 +180,6 @@ const KanbanBoard = () => {
     const data: DataType = storedDataString ? JSON.parse(storedDataString) : { columns: [], tasks: [] };
     useEffect(() => {
         if (data) {
-            // Assuming that the data object has properties columns and tasks
             setColumns(data.columns || []);
             setTasks(data.tasks || []);
         }
@@ -254,35 +254,30 @@ const KanbanBoard = () => {
                                 )}
                             />
                         </SortableContext>
-
-
                     </div>
-                    {createPortal(
-                        <DragOverlay>
-                            {activeColumn && (
-                                <ColumnContainer
-                                    column={activeColumn}
-                                    deleteColumn={deleteColumn}
-                                    updateColumn={updateColumn}
-                                    createTask={createTask}
-                                    deleteTask={deleteTask}
-                                    updateTask={updateTask}
-                                    tasks={tasks.filter(
-                                        (task) => task.columnId === activeColumn.id
-                                    )}
-                                />
-                            )}
-                            {activeTask && (
-                                <TaskCard
-                                    task={activeTask}
-                                    deleteTask={deleteTask}
-                                    updateTask={updateTask}
-                                    indexId="1"
-                                />
-                            )}
-                        </DragOverlay>,
-                        document.body
-                    )}
+                    <DragOverlay>
+                        {activeColumn && (
+                            <ColumnContainer
+                                column={activeColumn}
+                                deleteColumn={deleteColumn}
+                                updateColumn={updateColumn}
+                                createTask={createTask}
+                                deleteTask={deleteTask}
+                                updateTask={updateTask}
+                                tasks={tasks.filter(
+                                    (task) => task.columnId === activeColumn.id
+                                )}
+                            />
+                        )}
+                        {activeTask && (
+                            <TaskCard
+                                task={activeTask}
+                                deleteTask={deleteTask}
+                                updateTask={updateTask}
+                                indexId="1"
+                            />
+                        )}
+                    </DragOverlay>
                 </DndContext>
             </div>
         </div>

@@ -16,7 +16,7 @@ function Login() {
                 <h1>Welcome to Your Kanban Board</h1>
                 <div className="mt-4 flex flex-col gap-4">
                     <input value={name} onChange={(e) => setName(e.target.value)} type='text' autoFocus className={styleClass} placeholder="Please enter your name" />
-                    <button disabled={!name} className={`${styleClass}  ${!name && 'bg-[#444] opacity-30 cursor-'} flex justify-center text-center text-md`} onClick={handleLogin}>Continue</button>
+                    <button disabled={!name} className={`${styleClass}  ${!name && 'bg-[#444] opacity-30 cursor-not-allowed'} flex justify-center text-center text-md`} onClick={handleLogin}>Continue</button>
 
                 </div>
             </div>
