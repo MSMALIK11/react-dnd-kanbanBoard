@@ -46,7 +46,7 @@ function Header({ handleDarkMode, createNewColumn }: Prop) {
     return (
         <div className='flex items-center bg-white dark:bg-primary'>
             <div className='text-white  w-full   bg-gray-100 shadow-lg dark:bg-secondary sahdow-md rounded-lg  py-1 lg:px-12 md:px-6 sm:px-2 flex justify-between items-center '>
-                <div className='flex gap-4 items-center'><div className='dark:bg-primary bg-white p-2 rounded-full '><HomeIcon /></div> <h1 className='text-gray-900 hidden lg:d-block  md:block dark:text-white'> ⭐ Barcadly Services </h1></div>
+                <div className='flex gap-4 items-center'><div className='dark:bg-primary bg-white p-2 rounded-full '><HomeIcon /></div> <h1 className='text-gray-900 hidden lg:d-block  md:block dark:text-white'> ⭐ MS-SOFT-TECH </h1></div>
                 <div className='flex gap-4 items-center' id="header-navigation">
                     <Button label='New Board' onClick={createNewColumn} />
                     <DarkMode handleDarkMode={handleDarkMode} />
