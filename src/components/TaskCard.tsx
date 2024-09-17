@@ -9,7 +9,6 @@ interface Props {
     deleteTask: (id: Id) => void;
     updateTask: (id: Id, content: string) => void;
     indexId: Id
-
 }
 
 const colors = ["#FF3EA5", "#1D24CA", "#FDBF60", "#FF004D", "#F6F7C4"]
@@ -19,8 +18,8 @@ const getColor = (index: number): string => {
 };
 function TaskCard({ task, deleteTask, updateTask, indexId }: Props) {
     const [mouseIsOver, setMouseIsOver] = useState(false);
+     const [text, setText] = useState('');
     const [editMode, setEditMode] = useState(true);
-    console.log(updateTask)
     const {
         setNodeRef,
         attributes,
@@ -47,7 +46,22 @@ function TaskCard({ task, deleteTask, updateTask, indexId }: Props) {
         setEditMode((prev) => !prev);
         setMouseIsOver(false);
     };
+const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>, id: number) => {
+        if (e.key === 'Enter') {
+            const lines = task.content.split('\n');
+            const lastLine = lines[lines.length - 1];
 
+            // Check if the last line starts with a number followed by a period
+            const match = lastLine.match(/^(\d+)\.\s/);
+
+            if (match) {
+                const nextNumber = parseInt(match[1]) + 1;
+                e.preventDefault();
+                const updatedText = task.content + `\n${nextNumber}. `;
+                updateTask(id, updatedText);
+            }
+        }
+    };
     if (isDragging) {
         return (
             <div
@@ -80,12 +94,9 @@ function TaskCard({ task, deleteTask, updateTask, indexId }: Props) {
                     autoFocus
                     placeholder="Task content here"
                     onBlur={toggleEditMode}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && e.shiftKey) {
-                            toggleEditMode();
-                        }
-                    }}
+                 onKeyDown={(e) => handleKeyDown(e, task.id)}
                     onChange={(e) => updateTask(task.id, e.target.value)}
+              
                 />
             </div>
         );
@@ -98,7 +109,7 @@ function TaskCard({ task, deleteTask, updateTask, indexId }: Props) {
             {...attributes}
             {...listeners}
             onClick={toggleEditMode}
-            className="dark:bg-primary w-full dark:text-priamry bg-white shadow-lg  text-gray-900  p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500  cursor-grab relative task"
+            className="dark:bg-primary  w-full dark:text-priamry bg-white shadow-lg  text-gray-900  p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500  cursor-grab relative task"
             onMouseEnter={() => {
                 setMouseIsOver(true);
             }}
@@ -109,7 +120,7 @@ function TaskCard({ task, deleteTask, updateTask, indexId }: Props) {
             <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-primary dark:text-white">
                 {task.content}
             </p>
-
+         
             {mouseIsOver && (
                 <button
                     onClick={() => {

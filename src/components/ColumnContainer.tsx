@@ -93,7 +93,7 @@ function ColumnContainer({
                     }}
                     title="Double click to edit the column title"
                 >
-                    {!editMode && column.title}
+                    {!editMode && column.title}<span className="bg-blue-400 rounded-full inline-flex w-6 items-center justify-center ms-4">  {tasks?.length}</span>
                 </div>
                 {editMode && (
                     <input

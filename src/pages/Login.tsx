@@ -19,7 +19,7 @@ function Login() {
                     <button disabled={!name} className={`${styleClass}  ${!name && 'bg-[#444] opacity-30 cursor-not-allowed'} flex justify-center text-center text-md`} onClick={handleLogin}>Continue</button>
 
                 </div>
-            </div>
+            </div> 
         </div >
     )
 }
